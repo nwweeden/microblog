@@ -14,34 +14,37 @@ import uuid from 'uuid/v4'
  *  
  * 
  * State:
- *  - blogs(obj of arrays [{title, description, post}])
+ *  - blogs(obj of obj { id: {title, description, body, comments: [{id: 'c1', text: 't2'}, {}])
  */
 function App() {
-  const dummyData = [{ id: 1, title: "first blog", description: "first blog descp", body: "i dont know" }]
+  const dummyData = {'1': {title: "first blog", description: "first blog descp", body: "i dont know", comments: [{id: 'a', text:'first comment'}] }}
   const [blogs, setBlog] = useState(dummyData)
-  console.log("blogs state", blogs)
 
   function deleteBlog(blogId) {
-    setBlog(blogs => blogs.filter(blog => (blog.id !== parseInt(blogId))))
+    const blogCopy = {...blogs}
+    delete blogCopy[blogId]
+    setBlog(blogCopy)
   }
 
-  function addBlog(newBlog) {
-    if (!newBlog.id) {
-      const newBlogWithId = { ...newBlog, id: uuid() }
-      setBlog(blogs => [...blogs, newBlogWithId])
-    } else {
-      setBlog(blogs => blogs.map(element => {
-        if (element.id === newBlog.id) return newBlog
-        else return element
-      }))
+  function addBlog(blog, id) {
+    if (!id) id = uuid()
+
+    setBlog(blogs => {
+        return {...blogs, [id]: blog }
+      })
     }
+
+  function deleteComment(postId, id){
+    const comments = blogs[postId].comments
+    const newComments = comments.filter(comment => comment.id !== id)
+    setBlog({...blogs}, blogs[postId].comments = newComments)
   }
 
   return (
     <div className="App">
       <BrowserRouter>
         <NavBar />
-        <Routes blogs={blogs} deleteBlog={deleteBlog} addBlog={addBlog} />
+        <Routes blogs={blogs} deleteBlog={deleteBlog} addBlog={addBlog} deleteComment={deleteComment}/>
       </BrowserRouter>
     </div>
   );

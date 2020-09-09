@@ -1,15 +1,18 @@
 import React, { useState} from 'react'
 import { Link, useHistory } from 'react-router-dom'
 
-function BlogForm({ addBlog, blog }) {
+function BlogForm({ addBlog, blog, id }) {
   const history = useHistory()
 
-  //TODO: will need to update initital form data based on how form is used
-  const initialFormData = {
-    id: blog.id,
-    title: blog.title || '',
-    description: blog.description || '',
-    body: blog.body || '',
+  const initialFormData = blog ? {
+    // id: blog.id,
+    title: blog.title,
+    description: blog.description,
+    body: blog.body
+  } : {
+    title: '',
+    description: '',
+    body: ''
   }
 
   const [formData, setFormData] = useState(initialFormData);
@@ -24,7 +27,7 @@ function BlogForm({ addBlog, blog }) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    addBlog(formData)
+    addBlog(formData, id)
     setFormData(initialFormData)
     history.push("/")
   }

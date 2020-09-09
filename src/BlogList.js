@@ -3,11 +3,12 @@ import Blog from './Blog'
 import {Link} from 'react-router-dom'
 
 function BlogList({blogs}){
-  //iterate over blogs to create all blogs
-  //const blogDisplay = <Blog />
 
-  const renderBlogs = blogs.map(blog => (
-    <Link  key={blog.id} to={`/${blog.id}`}><Blog blog={blog} isBlogList={true}/></Link>
+  // console.log('blogs are:', blogs)
+  const renderBlogs = Object.entries(blogs).map(([key, value]) => (
+    <Link key={key} to={`/${key}`}>
+      <Blog blog={value} isBlogList={true}/>
+    </Link>
   ))
 
   return(
