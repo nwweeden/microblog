@@ -1,9 +1,13 @@
 import React from 'react';
 
-function Blog (){
-  //TODO: return based on condition of card list or card detail calling it
-  return(
-    <div>This is 1 blog</div>
+function Blog({ blog, isBlogList }) {
+  
+  return (
+    <div className="Blog">
+      <h2>{blog.title}</h2>
+      <h4>{blog.description}</h4>
+      {isBlogList ? null : <p>{blog.body}</p>}
+    </div>
   )
 }
 

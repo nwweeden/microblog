@@ -1,18 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Blog from './Blog'
 import BlogForm from './BlogForm'
-import {useParams} from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 
-function BlogDetail(){
+function BlogDetail({ blogs, deleteBlog, addBlog}) {
 
-  const blogId = useParams()
+  const [isEditing, setIsEditing] = useState(false)
+  const { postId } = useParams()
 
-  return(
+  const blog = blogs.find(element =>  element.id === parseInt(postId))
+
+  function handleEdit() {
+    setIsEditing(true)
+  }
+
+  function handleDelete() {
+    deleteBlog(postId)
+  }
+
+  const blogDetailDisplay = isEditing ? <BlogForm blog={blog} addBlog={addBlog}/> :
+    <>
+      <Blog blog={blog} />
+      <button onClick={handleEdit}>Edit</button>
+      <Link to='/'> <button onClick={handleDelete}>Delete</button></Link>
+    </>
+
+  return (
     <div>
-      <h3>This is the blog detail page</h3>
-      <Blog blogId={blogId}/>
-      <BlogForm blogId={blogId}/>
+      {blogDetailDisplay}
     </div>
   )
 }

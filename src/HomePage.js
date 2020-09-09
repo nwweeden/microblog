@@ -1,11 +1,11 @@
 import React from 'react';
 import BlogList from './BlogList'
 
-function Homepage(){
+function Homepage({blogs}){
   return(
     <div>
       <h3>Homepage</h3>
-      <BlogList />
+      <BlogList blogs={blogs}/>
     </div>
   )
 }

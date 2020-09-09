@@ -15,18 +15,18 @@ import BlogDetail from './BlogDetail'
  * State:
  *  
  */
-function Routes({blogs}){
+function Routes({blogs, deleteBlog, addBlog}){
   return(
     <div className ='Router'>
       <Switch>
         <Route exact path='/'>
-          <HomePage />
+          <HomePage blogs={blogs}/>
         </Route>
         <Route exact path='/new'>
-          <NewBlog />
+          <NewBlog addBlog={addBlog}/>
         </Route>
         <Route exact path='/:postId'>
-          <BlogDetail />
+          <BlogDetail blogs={blogs} deleteBlog={deleteBlog} addBlog={addBlog}/>
         </Route>
       </Switch>
     </div>
