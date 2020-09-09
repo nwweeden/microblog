@@ -1,24 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import NavBar from './NavBar'
+import Routes from './Routes'
+import { BrowserRouter } from 'react-router-dom';
 
+/**
+ * Renders all components
+ * 
+ * App --> {Navbar, Routes --> {Homepage, BlogDetails, NewBlog}}
+ * 
+ * Props:
+ *  
+ * 
+ * State:
+ *  - blogs(obj of arrays [{title, description, post}])
+ */
 function App() {
+
+  const [blogs, setBlog] = useState({})
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <NavBar />
+        <Routes blogs={blogs}/>
+      </BrowserRouter>
     </div>
   );
 }
