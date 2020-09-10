@@ -1,11 +1,11 @@
 import React from 'react'
 import BlogForm from './BlogForm'
 
-function NewBlog({addBlog}){
+function NewBlog(){
   return(
     <div>
       <h3>Make a new Blog</h3>
-      <BlogForm addBlog={addBlog}/>
+      <BlogForm />
     </div>
   )
 }

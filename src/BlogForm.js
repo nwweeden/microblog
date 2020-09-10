@@ -1,18 +1,24 @@
 import React, { useState} from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import {useDispatch} from 'react-redux'
+import {addBlog} from './actions'
 
-function BlogForm({ addBlog, blog, id }) {
+//TODO: Ask if we should dispatch in parent component
+function BlogForm({ blog, id }) {
   const history = useHistory()
+  const dispatch =useDispatch()
 
   const initialFormData = blog ? {
     // id: blog.id,
     title: blog.title,
     description: blog.description,
-    body: blog.body
+    body: blog.body,
+    comments : blog.comments
   } : {
     title: '',
     description: '',
-    body: ''
+    body: '',
+    comments : []
   }
 
   const [formData, setFormData] = useState(initialFormData);
@@ -27,7 +33,8 @@ function BlogForm({ addBlog, blog, id }) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    addBlog(formData, id)
+    dispatch(addBlog(formData, id))
+
     setFormData(initialFormData)
     history.push("/")
   }
