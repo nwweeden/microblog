@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Blog from './Blog'
 import BlogForm from './BlogForm'
 import { useParams, Link } from 'react-router-dom'
 import CommentList from './CommentList'
 import { useSelector, useDispatch } from 'react-redux'
-import { deleteBlog } from './actions'
+import { deleteBlog, getPostFromAPI } from './actions'
 
 /**
  * Renders blog detail, blogform to edit, and comment list
@@ -22,12 +22,22 @@ import { deleteBlog } from './actions'
  *  - Blog detail from redux
  */
 function BlogDetail() {
-  const blogs = useSelector(store => store.blogs)
   const dispatch = useDispatch()
 
   const [isEditing, setIsEditing] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const { blogId } = useParams()
 
+  useEffect(() => {
+    async function getPost() {
+      await dispatch(getPostFromAPI(blogId))
+      setIsLoading(false)
+    }
+    getPost()
+
+  }, [dispatch, blogId]);
+
+  const blogs = useSelector(store => store.blogs)
   const blog = blogs[blogId]
 
   function handleEdit() {
@@ -38,18 +48,26 @@ function BlogDetail() {
     dispatch(deleteBlog(blogId))
   }
 
-  const blogDetailDisplay = isEditing ? <BlogForm blog={blog} id={blogId} />
-    :
-    <>
-      <Blog blog={blog} />
-      <button onClick={handleEdit}>Edit</button>
-      <Link to='/'> <button onClick={handleDelete}>Delete</button></Link>
-      <CommentList comments={blog.comments} blogId={blogId} />
-    </>
+  function blogDetailDisplay() {
+    if (isEditing) {
+      return (
+        <BlogForm blog={blog} id={blogId} />
+      )
+    } else {
+      return (
+        <>
+          <Blog blog={blog} />
+          <button onClick={handleEdit}>Edit</button>
+          <Link to='/'> <button onClick={handleDelete}>Delete</button></Link>
+          <CommentList comments={blog.comments} blogId={blogId} />
+        </>
+      )
+    }
+  }
 
   return (
     <div className="BlogDetail">
-      {blogDetailDisplay}
+      {isLoading ? <h2>Loading...</h2> : blogDetailDisplay()}
     </div>
   )
 }

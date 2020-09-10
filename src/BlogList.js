@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Blog from './Blog'
-import {Link} from 'react-router-dom'
-import { useSelector, shallowEqual } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { useSelector, shallowEqual, useDispatch } from 'react-redux'
+import { getTitlesFromAPI } from "./actions.js"
 /**
  * Renders a list of blogs
  * 
@@ -17,21 +18,33 @@ import { useSelector, shallowEqual } from 'react-redux'
  * State:
  *  - From Redux: Blog detail
  */
-function BlogList(){
-  const blogs = useSelector(store => store.blogs, shallowEqual)
+function BlogList() {
+  const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(true)
 
+  useEffect(() => {
+    async function getTitles() {
+      await dispatch(getTitlesFromAPI())
+      setIsLoading(false)
+    }
+    getTitles()
+  }, [dispatch]);
 
-// CR:would include a 'blog' in the url
-  const renderBlogs = Object.entries(blogs).map(([key, value]) => (
-    <Link key={key} to={`/${key}`}>
-      <Blog blog={value} isBlogList={true}/>
+  const titles = useSelector(store => store.titles, shallowEqual)
+
+  // CR:would include a 'blog' in the url
+  const renderTitles = titles.map(title => (
+    <Link key={title.id} to={`/${title.id}`}>
+      <Blog blog={title} isBlogList={true} />
     </Link>
   ))
+  //TODO : isBlogList={true} ?
 
-  return(
+
+  return (
     <div className="BlogList">
       <h3>BlogList</h3>
-      {renderBlogs}
+      {isLoading ? <h2>Loading...</h2> : renderTitles}
     </div>
   )
 }

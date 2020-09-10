@@ -21,9 +21,10 @@ function Blog({ blog, isBlogList }) {
     <div className="Blog">
       <h2>{blog.title}</h2>
       <h4>{blog.description}</h4>
+      {/* {blog.body ?   <p>{blog.body}</p> : null} */}
       {isBlogList ? null : <p>{blog.body}</p>}
     </div>
   )
 }
-
+//TODO:try to get rid of isBlogList
 export default Blog

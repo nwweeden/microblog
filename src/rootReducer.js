@@ -1,19 +1,12 @@
-import { ADD_BLOG, DELETE_BLOG, ADD_COMMENT, DELETE_COMMENT } from './actionTypes'
+import {
+  ADD_BLOG, DELETE_BLOG, ADD_COMMENT,
+  DELETE_COMMENT, LOAD_TITLES, GET_BLOG
+} from './actionTypes'
 import uuid from 'uuid/v4'
 
 const INITIAL_DATA = {
-  blogs: {
-    '1':
-    {
-      title: "first blog",
-      description: "first blog descp",
-      body: "i dont know",
-      comments: [
-        { id: 'a', text: 'first comment' },
-        { id: 'b', text: 'second comment' }
-      ]
-    }
-  }
+  blogs: {},
+  titles: []
 }
 
 //alternate way to organize our state:
@@ -27,7 +20,7 @@ const INITIAL_DATA = {
 //   }
 // }
 /**
- * State: {blogs: {blogId: {title, description, body, comments: [{id, text}]}}}
+ * State: {blogs: {blogId: {id, title, description, body, comments: [{id, text}]}}}
  * 
  * Actions:
  *  - Add Blog (also handles blog edits)
@@ -39,6 +32,21 @@ const INITIAL_DATA = {
 function rootReducer(state = INITIAL_DATA, action) {
   switch (action.type) {
 
+    case GET_BLOG: {
+      let blog = action.payload
+      console.log("got blog", blog)
+
+      return {
+        ...state, blogs: { ...state.blogs, [blog.id]: blog }
+      }
+    }
+
+    case LOAD_TITLES: {
+      return {
+        ...state, titles: action.payload
+      }
+    }
+
     case ADD_BLOG: {
       let { id, blog } = action.payload
 
@@ -49,7 +57,7 @@ function rootReducer(state = INITIAL_DATA, action) {
       }
     }
 
-    case DELETE_BLOG:{
+    case DELETE_BLOG: {
       const id = action.payload
 
       const blogCopy = { ...state.blogs }
@@ -70,7 +78,7 @@ function rootReducer(state = INITIAL_DATA, action) {
 
       //In the return, need to spread each level before proceeding, until reaching desire value to change (newComment)
       return {
-        ...state, blogs: {...state.blogs, [blogId]: {...blog, comments: [...blog.comments, newComment]}}
+        ...state, blogs: { ...state.blogs, [blogId]: { ...blog, comments: [...blog.comments, newComment] } }
       }
     }
 
@@ -82,7 +90,7 @@ function rootReducer(state = INITIAL_DATA, action) {
       const blog = state.blogs[blogId]
 
       return {
-        ...state, blogs: {...state.blogs, [blogId]: {...blog, comments: newComments}}
+        ...state, blogs: { ...state.blogs, [blogId]: { ...blog, comments: newComments } }
       }
     }
 

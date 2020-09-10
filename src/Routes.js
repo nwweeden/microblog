@@ -32,7 +32,7 @@ function Routes(){
         <Route exact path='/:blogId'>
           <BlogDetail />
         </Route>
-        <Redirect path = '/'/>
+        <Redirect to = '/'/>
       </Switch>
     </div>
   )
