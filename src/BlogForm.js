@@ -2,26 +2,39 @@ import React, { useState} from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import {useDispatch} from 'react-redux'
 import {addBlog} from './actions'
-
-//TODO: Ask if we should dispatch in parent component
-function BlogForm({ blog, id }) {
+/**
+ * Renders a blogform for adding/editing blogs
+ * 
+  * App --> {Navbar,
+ *  Routes --> {
+ *    Homepage --> {BlogList-->Blog},
+ *    BlogDetails--> {Blog, CommentList --> {Comment, CommentForm}, BlogForm},
+ *    NewBlog --> {BlogForm}}}
+ * 
+ * Props:
+ *  - single blog detail, id of blog
+ * 
+ * State:
+ *  - Form input
+ */
+function BlogForm({ blog = {title: '', description: '', body: '', comments : []}, id }) {
   const history = useHistory()
   const dispatch =useDispatch()
 
-  const initialFormData = blog ? {
-    // id: blog.id,
-    title: blog.title,
-    description: blog.description,
-    body: blog.body,
-    comments : blog.comments
-  } : {
-    title: '',
-    description: '',
-    body: '',
-    comments : []
-  }
+  //CR: can give the blog default values
+  // const initialFormData = blog ? {
+  //   title: blog.title,
+  //   description: blog.description,
+  //   body: blog.body,
+  //   comments : blog.comments
+  // } : {
+  //   title: '',
+  //   description: '',
+  //   body: '',
+  //   comments : []
+  // }
 
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState(blog);
 
   function handleChange(evt) {
     const { name, value } = evt.target;
@@ -34,8 +47,8 @@ function BlogForm({ blog, id }) {
   function handleSubmit(evt) {
     evt.preventDefault();
     dispatch(addBlog(formData, id))
-
-    setFormData(initialFormData)
+    // CR: Not sure we need to reset the form data
+    // setFormData(blog)
     history.push("/")
   }
 
@@ -53,7 +66,6 @@ function BlogForm({ blog, id }) {
         <label htmlFor='body'>Body:</label>
         <input name='body' value={formData.body} onChange={handleChange} />
 
-        {/* TODO: updated save and cancel links */}
         <button >Save</button>
 
       </form>

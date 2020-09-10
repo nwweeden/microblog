@@ -8,52 +8,25 @@ import uuid from 'uuid/v4'
 /**
  * Renders all components
  * 
- * App --> {Navbar, Routes --> {Homepage, BlogDetails, NewBlog}}
+ * App --> {Navbar,
+ *  Routes --> {
+ *    Homepage --> {BlogList-->Blog},
+ *    BlogDetails--> {Blog, CommentList --> {Comment, CommentForm}, BlogForm},
+ *    NewBlog --> {BlogForm}}}
  * 
  * Props:
  *  
  * 
  * State:
- *  - blogs(obj of obj { id: {title, description, body, comments: [{id: 'c1', text: 't2'}, {}])
+ *  - Handled in redux
  */
 function App() {
-  // const dummyData = { '1': { title: "first blog", description: "first blog descp", body: "i dont know", comments: [{ id: 'a', text: 'first comment' }] } }
-  // const [blogs, setBlog] = useState(dummyData)
-
-  // function deleteBlog(blogId) {
-  //   const blogCopy = { ...blogs }
-  //   delete blogCopy[blogId]
-  //   setBlog(blogCopy)
-  // }
-
-  // function addBlog(blog, id) {
-  //   if (!id) id = uuid()
-
-  //   setBlog(blogs => {
-  //     return { ...blogs, [id]: blog }
-  //   })
-  // }
-
-  // function deleteComment(postId, id) {
-  //   const comments = blogs[postId].comments
-  //   const newComments = comments.filter(comment => comment.id !== id)
-  //   setBlog({ ...blogs }, blogs[postId].comments = newComments)
-  // }
-
-  // function addComment(comment, postId) {
-  //   console.log("blog of post id", blogs[postId], postId)
-  //   const newComment = { ...comment, id: uuid() }
-  //   const comments = blogs[postId].comments
-  //   const updatedComments = [...comments, newComment]
-  //   setBlog({ ...blogs }, blogs[postId].comments = updatedComments)
-  // }
-
+  
   return (
     <div className="App">
       <BrowserRouter>
         <NavBar />
         <Routes />
-        {/* <Routes blogs={blogs} deleteBlog={deleteBlog} addBlog={addBlog} deleteComment={deleteComment} addComment={addComment} /> */}
       </BrowserRouter>
     </div>
   );

@@ -1,5 +1,6 @@
 import {ADD_BLOG, DELETE_BLOG, ADD_COMMENT, DELETE_COMMENT} from './actionTypes'
 
+//actions for redux
 export function addBlog(blog, id){
   return {
     type : ADD_BLOG,

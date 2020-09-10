@@ -1,7 +1,23 @@
 import React, {useState} from 'react'
 import { useDispatch} from 'react-redux'
+import { addComment } from './actions'
 
-function CommentForm({ postId}){
+/**
+ * Renders a comment form
+ * 
+ * App --> {Navbar,
+ *  Routes --> {
+ *    Homepage --> {BlogList-->Blog},
+ *    BlogDetails--> {Blog, CommentList --> {Comment, CommentForm}, BlogForm},
+ *    NewBlog --> {BlogForm}}}
+ * 
+ * Props:
+ *  - blogId: string of blog's id
+ * 
+ * State:
+ * - none
+ */
+function CommentForm({blogId}){
   const dispatch = useDispatch()
   const initialData = {
     text : ''
@@ -18,7 +34,7 @@ function CommentForm({ postId}){
 
   function handleSubmit(evt){
     evt.preventDefault()
-    dispatch(addComment(formData, postId))
+    dispatch(addComment(formData, blogId))
     setFormData(initialData)
   }
 

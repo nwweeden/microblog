@@ -7,32 +7,18 @@ import BlogDetail from './BlogDetail'
 /**
  * Renders all components
  * 
- * App --> {Navbar, Routes --> {Homepage, BlogDetails, NewBlog}}
+ * App --> {Navbar,
+ *  Routes --> {
+ *    Homepage --> {BlogList-->Blog},
+ *    BlogDetails--> {Blog, CommentList --> {Comment, CommentForm}, BlogForm},
+ *    NewBlog --> {BlogForm}}}
  * 
  * Props:
- *  - blogs(obj of arrays [{title, description, post}])
+ *  - None
  * 
  * State:
- *  
+ *  - none
  */
-// function Routes({blogs, deleteBlog, addBlog, deleteComment, addComment}){
-//   return(
-//     <div className ='Router'>
-//       <Switch>
-//         <Route exact path='/'>
-//           <HomePage blogs={blogs}/>
-//         </Route>
-//         <Route exact path='/new'>
-//           <NewBlog addBlog={addBlog}/>
-//         </Route>
-//         <Route exact path='/:postId'>
-//           <BlogDetail blogs={blogs} deleteBlog={deleteBlog} addBlog={addBlog} deleteComment={deleteComment} addComment={addComment}/>
-//         </Route>
-//       </Switch>
-//     </div>
-//   )
-// }
-
 function Routes(){
   return(
     <div className ='Router'>
@@ -43,9 +29,10 @@ function Routes(){
         <Route exact path='/new'>
           <NewBlog />
         </Route>
-        <Route exact path='/:postId'>
+        <Route exact path='/:blogId'>
           <BlogDetail />
         </Route>
+        <Redirect path = '/'/>
       </Switch>
     </div>
   )

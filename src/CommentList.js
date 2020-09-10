@@ -2,28 +2,34 @@ import React from 'react';
 import Comment from './Comment'
 import CommentForm from './CommentForm'
 
-function CommentList({ comments, postId }) {
-
-  // blogs(obj of obj { id: {title, description, post, comments: [{id: 'c1', text: 't2'}, {}])
+/**
+ * Renders a list of comments
+ * 
+ * App --> {Navbar,
+ *  Routes --> {
+ *    Homepage --> {BlogList-->Blog},
+ *    BlogDetails--> {Blog, CommentList --> {Comment, CommentForm}, BlogForm},
+ *    NewBlog --> {BlogForm}}}
+ * 
+ * Props:
+ *  - Comments: array of comments
+ *  - blogId: string of blog's id
+ * 
+ * State:
+ * - none
+ */
+function CommentList({ comments, blogId }) {
 
   const renderComments = comments.length > 0 ? 
     comments.map(comment =>
-      <Comment key={comment.id} comment={comment}  postId={postId} />) :
-    null
+      <Comment key={comment.id} comment={comment}  blogId={blogId} />) : null
 
-  // const commentsAsArray = Object.entries(comments)
-  // commentsAsArray.sort((a, b) => b.date - a.date)
-  // const renderComments = Object.entries(comments).map(([key, value]) => (
-  //   <li>
-  //     {value}
-  //   </li>
-  // ))
-
+      //TODO: remove ULs - Don't need the Uls if there are no commemtns
   return (<div>
     <ul>
       {renderComments}
     </ul>
-    <CommentForm postId={postId} />
+    <CommentForm blogId={blogId} />
   </div>
   )
 }
