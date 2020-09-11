@@ -1,7 +1,8 @@
-import React, { useState} from 'react'
+import React, {useState} from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import {useDispatch} from 'react-redux'
-import {addBlog} from './actions'
+import { addBlogToAPI, editBlogInAPI } from './actions'
+
 /**
  * Renders a blogform for adding/editing blogs
  * 
@@ -17,22 +18,9 @@ import {addBlog} from './actions'
  * State:
  *  - Form input
  */
-function BlogForm({ blog = {title: '', description: '', body: '', comments : []}, id }) {
+function BlogForm({ blog = {title: '', description: '', body: ''}, edit=false}) {
   const history = useHistory()
   const dispatch =useDispatch()
-
-  //CR: can give the blog default values
-  // const initialFormData = blog ? {
-  //   title: blog.title,
-  //   description: blog.description,
-  //   body: blog.body,
-  //   comments : blog.comments
-  // } : {
-  //   title: '',
-  //   description: '',
-  //   body: '',
-  //   comments : []
-  // }
 
   const [formData, setFormData] = useState(blog);
 
@@ -44,11 +32,12 @@ function BlogForm({ blog = {title: '', description: '', body: '', comments : []}
     }));
   }
 
-  function handleSubmit(evt) {
+  async function handleSubmit(evt) {
     evt.preventDefault();
-    dispatch(addBlog(formData, id))
-    // CR: Not sure we need to reset the form data
-    // setFormData(blog)
+    edit ?
+      await dispatch(editBlogInAPI(formData)) :
+      await dispatch(addBlogToAPI(formData))
+
     history.push("/")
   }
 

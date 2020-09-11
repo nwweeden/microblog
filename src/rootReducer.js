@@ -1,5 +1,5 @@
 import {
-  ADD_BLOG, DELETE_BLOG, ADD_COMMENT,
+  ADD_OR_EDIT_BLOG, DELETE_BLOG, ADD_COMMENT,
   DELETE_COMMENT, LOAD_TITLES, GET_BLOG
 } from './actionTypes'
 import uuid from 'uuid/v4'
@@ -34,7 +34,6 @@ function rootReducer(state = INITIAL_DATA, action) {
 
     case GET_BLOG: {
       let blog = action.payload
-      console.log("got blog", blog)
 
       return {
         ...state, blogs: { ...state.blogs, [blog.id]: blog }
@@ -47,24 +46,33 @@ function rootReducer(state = INITIAL_DATA, action) {
       }
     }
 
-    case ADD_BLOG: {
-      let { id, blog } = action.payload
-
-      if (!id) id = uuid()
+    case ADD_OR_EDIT_BLOG: {
+      let blog = action.payload
 
       return {
-        ...state, blogs: { ...state.blogs, [id]: blog }
+        ...state, blogs: { ...state.blogs, [blog.id]: blog }
       }
     }
 
+    // case EDIT_BLOG: {
+    //   let blog = action.payload
+
+    //   ...state, blogs: { ...state.blogs, [blog.id]: blog }
+
+    // }
+
+    //TODO: WHy do we have to delete titles manually? Arnt we awaiting?
     case DELETE_BLOG: {
       const id = action.payload
 
       const blogCopy = { ...state.blogs }
+      const titleCopy = [ ...state.titles ]
+
       delete blogCopy[id]
+      const resultTitles = titleCopy.filter(title => title[id] !== id)
 
       return {
-        ...state, blogs: blogCopy
+        ...state, blogs: blogCopy, titles: resultTitles
       }
     }
 

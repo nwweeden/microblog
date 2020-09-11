@@ -19,19 +19,23 @@ import { getTitlesFromAPI } from "./actions.js"
  *  - From Redux: Blog detail
  */
 function BlogList() {
+  console.log('ENTERED BLOGLIST')
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     async function getTitles() {
       await dispatch(getTitlesFromAPI())
+      console.log('WEVE GOTTEN THE TITLES')
       setIsLoading(false)
     }
     getTitles()
   }, [dispatch]);
 
+  //titles havn't change when the use Selecgtor checks becasue the API is responding 
+  // faster with get titles than deleting
   const titles = useSelector(store => store.titles, shallowEqual)
-
+  const postLen = useSelector(store => Object.keys(store.blogs).length)
   // CR:would include a 'blog' in the url
   const renderTitles = titles.map(title => (
     <Link key={title.id} to={`/${title.id}`}>
