@@ -100,32 +100,26 @@ function rootReducer(state = INITIAL_DATA, action) {
 
     case VOTE: {
       const { blogId, votes } = action.payload
-      console.log("blogId and votes", blogId, votes)
+      // console.log("blogId and votes", blogId, votes)
       
       const blog = state.blogs[blogId]
-      const titlesCopy = [ ...state.titles ]
 
-      const resultTitle = titlesCopy.filter(title => title.id === blogId)
-      resultTitle.votes = votes.votes
-      
-      const updatedTitles = titlesCopy.filter(title => title.id !== blogId)
-      updatedTitles.push(resultTitle)
+      const resultTitles = state.titles.map(title => {
+        const newTitle = {...title}
+        if(newTitle.id === blogId){
+          newTitle.votes = votes
+        }
+        return newTitle
+      })
 
       return {
-        ...state, blogs: { ...state.blogs, [blogId]: { ...blog, votes: votes.votes } },
-        titles :updatedTitles
+        ...state, blogs: { ...state.blogs, [blogId]: { ...blog, votes: votes } },
+        titles : resultTitles
       }
     }
-//{blogs: {blogId: {id, title, description, body, comments: [{id, text}]}}}
-//titles= [{title, descp, votes, id}, {title, descp, votes, id}]
+
     default:
       return state;
   }
 }
 export default rootReducer
-// blog 
-// [{…}, votes: 5]
-// 0: {id: 1, title: "First Post", description: "Best post ever!", votes: 4}
-// votes: 5
-// length: 1
-// __proto__: Array(0)

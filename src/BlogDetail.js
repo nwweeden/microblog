@@ -3,7 +3,7 @@ import Blog from './Blog'
 import BlogForm from './BlogForm'
 import { useParams, useHistory } from 'react-router-dom'
 import CommentList from './CommentList'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 import { deleteBlogInAPI, getPostFromAPI } from './actions'
 
 /**
@@ -30,20 +30,21 @@ function BlogDetail() {
   const [isLoading, setIsLoading] = useState(true)
   const { blogId } = useParams()
 
-  const blogs = useSelector(store => store.blogs)
+  const blogs = useSelector(store => store.blogs, shallowEqual)
   const blog = blogs[blogId]
-
-  //function name
-  useEffect(() => {
+  
+  useEffect(function getBlogIfNoBlogComments() {
+    let check = true;
     async function getPost() {
       await dispatch(getPostFromAPI(blogId))
-      console.log('about to set loading to false!')
-      setIsLoading(false)
+      if (check) setIsLoading(false)
     }
-    if(!blog) getPost()
+    if(!blog || !blog.comments) getPost()
     else  setIsLoading(false)
-
-  }, [dispatch, blogId]);
+    return function(){
+      check = false;
+    }
+  }, [dispatch, blogId, blog]);
 
 
   function handleEdit() {

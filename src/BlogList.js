@@ -22,7 +22,13 @@ function BlogList() {
   console.log('ENTERED BLOGLIST')
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(true)
-
+  
+  //titles havn't change when the use Selecgtor checks becasue the API is responding 
+  // faster with get titles than deleting
+  const titles = useSelector(store => store.titles, shallowEqual)
+  // const titles = useSelector(store => store.titles, deepEqual)
+  const postLen = useSelector(store => Object.keys(store.blogs).length)
+  
   useEffect(() => {
     async function getTitles() {
       await dispatch(getTitlesFromAPI())
@@ -32,10 +38,6 @@ function BlogList() {
     getTitles()
   }, [dispatch]);
 
-  //titles havn't change when the use Selecgtor checks becasue the API is responding 
-  // faster with get titles than deleting
-  const titles = useSelector(store => store.titles, shallowEqual)
-  const postLen = useSelector(store => Object.keys(store.blogs).length)
   // CR:would include a 'blog' in the url
   const renderTitles = titles.map(title => (
       <Blog key = {title.id} blog={title} isBlogList={true} />

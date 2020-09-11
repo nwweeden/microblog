@@ -21,7 +21,7 @@ import {useDispatch} from 'react-redux'
  */
 function Blog({ blog, isBlogList }) {
   const dispatch = useDispatch()
-  console.log("blog", blog)
+  // console.log("blog", blog)
   
   async function handleVote(evt) {
     const direction = evt.target.id

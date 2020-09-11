@@ -74,7 +74,7 @@ function editBlog(blog){
 export function deleteBlogInAPI(blogId){
   return async function (dispatch){
     await axios.delete(`${BASE_URL}posts/${blogId}`)
-    console.log('We deleted from the database')
+    // console.log('We deleted from the database')
     dispatch(deleteBlog(blogId))
   }
 }
@@ -103,7 +103,7 @@ export function AddCommentToAPI(comment, blogId){
 export function deleteCommentInAPI(commentId, blogId){
   return async function (dispatch){
    await axios.delete(`${BASE_URL}posts/${blogId}/comments/${commentId}`)
-    console.log('We deleted from the database')
+    // console.log('We deleted from the database')
     dispatch(deleteComment(commentId, blogId))
   }
 }
@@ -115,19 +115,18 @@ export function deleteCommentInAPI(commentId, blogId){
   }
 }
 
+//either change the direction to a boolean or validate so it's less error prone
 export function voteInAPI(blogId, direction){
-  console.log("inside voteInAPI &  blogId : ", blogId, direction)
-  console.log("url : ", `${BASE_URL}posts/${blogId}/vote/${direction}`)
+  // console.log("inside voteInAPI &  blogId : ", blogId, direction)
+  // console.log("url : ", `${BASE_URL}posts/${blogId}/vote/${direction}`)
   
   return async function (dispatch){
-    console.log("url in return : ", `${BASE_URL}posts/${blogId}/vote/${direction}`)
+    // console.log("url in return : ", `${BASE_URL}posts/${blogId}/vote/${direction}`)
   
     let res = await axios.post(`${BASE_URL}posts/${blogId}/vote/${direction}`)
-    dispatch(vote(blogId, res.data))
+    dispatch(vote(blogId, res.data.votes))
   }
 }
-//     http://localhost:5000/api/posts/1/vote/up
-//url :  http://localhost:5000/api/posts/1/vote/up
 
  function vote(blogId, votes){
   return {
