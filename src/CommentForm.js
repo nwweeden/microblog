@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import { useDispatch} from 'react-redux'
-import { addComment } from './actions'
+import { AddCommentToAPI } from './actions'
 
 /**
  * Renders a comment form
@@ -32,9 +32,9 @@ function CommentForm({blogId}){
     }))
   }
 
-  function handleSubmit(evt){
+  async function handleSubmit(evt){
     evt.preventDefault()
-    dispatch(addComment(formData, blogId))
+    await dispatch(AddCommentToAPI(formData, blogId))
     setFormData(initialData)
   }
 

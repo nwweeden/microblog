@@ -1,5 +1,5 @@
 import {ADD_OR_EDIT_BLOG, DELETE_BLOG, ADD_COMMENT, 
-  DELETE_COMMENT, LOAD_TITLES, GET_BLOG} from './actionTypes'
+  DELETE_COMMENT, LOAD_TITLES, GET_BLOG, VOTE} from './actionTypes'
 import axios from "axios";
 const BASE_URL = 'http://localhost:5000/api/'
 
@@ -86,18 +86,52 @@ function deleteBlog(blogId){
   }
 }
 
+export function AddCommentToAPI(comment, blogId){
+  return async function (dispatch){
+    let res = await axios.post(`${BASE_URL}posts/${blogId}/comments`, comment)
+    dispatch(addComment(res.data, blogId))
+  }
+}
 
-
-export function addComment(comment, blogId){
+ function addComment(comment, blogId){
   return {
     type : ADD_COMMENT,
     payload : {comment, blogId}
   }
 }
 
-export function deleteComment(blogId, commentId){
+export function deleteCommentInAPI(commentId, blogId){
+  return async function (dispatch){
+   await axios.delete(`${BASE_URL}posts/${blogId}/comments/${commentId}`)
+    console.log('We deleted from the database')
+    dispatch(deleteComment(commentId, blogId))
+  }
+}
+
+ function deleteComment(commentId, blogId){
   return {
     type : DELETE_COMMENT,
     payload : {blogId, commentId}
+  }
+}
+
+export function voteInAPI(blogId, direction){
+  console.log("inside voteInAPI &  blogId : ", blogId, direction)
+  console.log("url : ", `${BASE_URL}posts/${blogId}/vote/${direction}`)
+  
+  return async function (dispatch){
+    console.log("url in return : ", `${BASE_URL}posts/${blogId}/vote/${direction}`)
+  
+    let res = await axios.post(`${BASE_URL}posts/${blogId}/vote/${direction}`)
+    dispatch(vote(blogId, res.data))
+  }
+}
+//     http://localhost:5000/api/posts/1/vote/up
+//url :  http://localhost:5000/api/posts/1/vote/up
+
+ function vote(blogId, votes){
+  return {
+    type : VOTE,
+    payload : {blogId, votes}
   }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './Blog'
 import BlogForm from './BlogForm'
-import { useParams, Link, useHistory } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import CommentList from './CommentList'
 import { useSelector, useDispatch } from 'react-redux'
 import { deleteBlogInAPI, getPostFromAPI } from './actions'
@@ -30,18 +30,21 @@ function BlogDetail() {
   const [isLoading, setIsLoading] = useState(true)
   const { blogId } = useParams()
 
+  const blogs = useSelector(store => store.blogs)
+  const blog = blogs[blogId]
+
+  //function name
   useEffect(() => {
     async function getPost() {
       await dispatch(getPostFromAPI(blogId))
       console.log('about to set loading to false!')
       setIsLoading(false)
     }
-    getPost()
+    if(!blog) getPost()
+    else  setIsLoading(false)
 
   }, [dispatch, blogId]);
 
-  const blogs = useSelector(store => store.blogs)
-  const blog = blogs[blogId]
 
   function handleEdit() {
     setIsEditing(true)

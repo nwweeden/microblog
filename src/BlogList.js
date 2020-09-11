@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Blog from './Blog'
-import { Link } from 'react-router-dom'
+
 import { useSelector, shallowEqual, useDispatch } from 'react-redux'
 import { getTitlesFromAPI } from "./actions.js"
 /**
@@ -38,9 +38,7 @@ function BlogList() {
   const postLen = useSelector(store => Object.keys(store.blogs).length)
   // CR:would include a 'blog' in the url
   const renderTitles = titles.map(title => (
-    <Link key={title.id} to={`/${title.id}`}>
-      <Blog blog={title} isBlogList={true} />
-    </Link>
+      <Blog key = {title.id} blog={title} isBlogList={true} />
   ))
   //TODO : isBlogList={true} ?
 

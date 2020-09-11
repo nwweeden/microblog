@@ -1,8 +1,8 @@
 import {
   ADD_OR_EDIT_BLOG, DELETE_BLOG, ADD_COMMENT,
-  DELETE_COMMENT, LOAD_TITLES, GET_BLOG
+  DELETE_COMMENT, LOAD_TITLES, GET_BLOG, VOTE
 } from './actionTypes'
-import uuid from 'uuid/v4'
+import { voteInAPI } from './actions'
 
 const INITIAL_DATA = {
   blogs: {},
@@ -79,14 +79,10 @@ function rootReducer(state = INITIAL_DATA, action) {
     case ADD_COMMENT: {
       const { comment, blogId } = action.payload
 
-      const newComment = { ...comment, id: uuid() }
       const blog = state.blogs[blogId]
-      // const comments = state.blogs[blogId].comments
-      // const updatedComments = [...comments, newComment]
-
-      //In the return, need to spread each level before proceeding, until reaching desire value to change (newComment)
+      
       return {
-        ...state, blogs: { ...state.blogs, [blogId]: { ...blog, comments: [...blog.comments, newComment] } }
+        ...state, blogs: { ...state.blogs, [blogId]: { ...blog, comments: [...blog.comments, comment] } }
       }
     }
 
@@ -102,8 +98,34 @@ function rootReducer(state = INITIAL_DATA, action) {
       }
     }
 
+    case VOTE: {
+      const { blogId, votes } = action.payload
+      console.log("blogId and votes", blogId, votes)
+      
+      const blog = state.blogs[blogId]
+      const titlesCopy = [ ...state.titles ]
+
+      const resultTitle = titlesCopy.filter(title => title.id === blogId)
+      resultTitle.votes = votes.votes
+      
+      const updatedTitles = titlesCopy.filter(title => title.id !== blogId)
+      updatedTitles.push(resultTitle)
+
+      return {
+        ...state, blogs: { ...state.blogs, [blogId]: { ...blog, votes: votes.votes } },
+        titles :updatedTitles
+      }
+    }
+//{blogs: {blogId: {id, title, description, body, comments: [{id, text}]}}}
+//titles= [{title, descp, votes, id}, {title, descp, votes, id}]
     default:
       return state;
   }
 }
 export default rootReducer
+// blog 
+// [{…}, votes: 5]
+// 0: {id: 1, title: "First Post", description: "Best post ever!", votes: 4}
+// votes: 5
+// length: 1
+// __proto__: Array(0)

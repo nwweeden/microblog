@@ -1,6 +1,6 @@
 import React from 'react'
 import {useDispatch} from 'react-redux'
-import {deleteComment} from './actions'
+import {deleteCommentInAPI} from './actions'
 /**
  * Renders a single comment
  * 
@@ -20,8 +20,8 @@ import {deleteComment} from './actions'
 function Comment({comment, blogId}){
   const dispatch = useDispatch()
 
-  function handleDelete(){
-    dispatch(deleteComment(blogId, comment.id))
+  async function handleDelete(){
+    await dispatch(deleteCommentInAPI(comment.id, blogId))
   }
   
   return (
